@@ -303,7 +303,7 @@ public class MainActivity extends BluetoothActivity {
                     byte[] writeBuf = (byte[]) msg.obj;
                     // construct a string from the buffer
                     String writeMessage = new String(writeBuf);
-/*                    */
+
                     /*mConversationArrayAdapter.add("Me:  " + writeMessage);*/
                     /*onSendTextChange.OnSendTextChange("Me:  " +writeMessage);*/
                     break;
@@ -311,6 +311,7 @@ public class MainActivity extends BluetoothActivity {
                     byte[] readBuf = (byte[]) msg.obj;
                     // construct a string from the valid bytes in the buffer
                     String readMessage = new String(readBuf, 0, msg.arg1);
+                    onReceiveMessage.readMsg(readMessage);
                     /*onGetTextChange.OnGetTextChange(mConnectedDeviceName + ":  "+readMessage);*/
                    /* mConversationArrayAdapter.add(mConnectedDeviceName + ":  " + readMessage);*/
                     break;
@@ -330,4 +331,16 @@ public class MainActivity extends BluetoothActivity {
             }
         }
     };
+
+    public interface OnReceiveMessage{
+        void readMsg(String msg);
+    }
+
+    private OnReceiveMessage onReceiveMessage;
+
+    public void setOnReceiveMessage(OnReceiveMessage onReceiveMessage){
+        this.onReceiveMessage=onReceiveMessage;
+    }
+
+
 }

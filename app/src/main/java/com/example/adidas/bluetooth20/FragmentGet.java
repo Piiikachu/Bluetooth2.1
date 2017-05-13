@@ -19,6 +19,7 @@ public class FragmentGet extends Fragment {
 
     private ListView listView;
     private GetListAdapter mAdapter;
+    private TextView textView;
 
     private Button btnTest;
     private float[] data;
@@ -50,9 +51,19 @@ public class FragmentGet extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_get, container, false);
-        TextView textView = (TextView) rootView.findViewById(R.id.fragget_text);
+
+        MainActivity activity= (MainActivity) getActivity();
+
+
+        textView = (TextView) rootView.findViewById(R.id.fragget_text);
         textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
 
+        activity.setOnReceiveMessage(new MainActivity.OnReceiveMessage() {
+            @Override
+            public void readMsg(String msg) {
+                textView.setText(msg);
+            }
+        });
         btnTest= (Button) rootView.findViewById(R.id.fragget_btn);
         listView= (ListView) rootView.findViewById(R.id.fragget_listview);
         data=new float[5];

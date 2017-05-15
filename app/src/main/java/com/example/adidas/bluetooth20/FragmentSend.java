@@ -87,6 +87,8 @@ public class FragmentSend extends Fragment {
         btnSingle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                floatData=getFloatData();
                 collection=new DataCollection(floatData,status,result);
                 String message=collection.toString();
                 activity.sendMessage(message);

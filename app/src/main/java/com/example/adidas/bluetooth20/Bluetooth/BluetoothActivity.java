@@ -157,7 +157,7 @@ public abstract class BluetoothActivity extends AppCompatActivity {
         }
     }
 
-    protected void sendMessage(String message) {
+    public void sendMessage(String message) {
 
         Bundle bundle=new Bundle();
 

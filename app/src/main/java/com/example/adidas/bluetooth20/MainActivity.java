@@ -311,7 +311,12 @@ public class MainActivity extends BluetoothActivity {
                     byte[] readBuf = (byte[]) msg.obj;
                     // construct a string from the valid bytes in the buffer
                     String readMessage = new String(readBuf, 0, msg.arg1);
+                    int length=analyse(readMessage);
+                    if (length==7){
+
+                    }else{
                     onReceiveMessage.readMsg(readMessage);
+                    }
                     /*onGetTextChange.OnGetTextChange(mConnectedDeviceName + ":  "+readMessage);*/
                    /* mConversationArrayAdapter.add(mConnectedDeviceName + ":  " + readMessage);*/
                     break;
@@ -342,5 +347,20 @@ public class MainActivity extends BluetoothActivity {
         this.onReceiveMessage=onReceiveMessage;
     }
 
+    public interface OnReceiveOrder{
+        void onOrder(String msg);
+    }
+
+    private OnReceiveOrder onReceiveOrder;
+
+    public void setOnReceiveOrder(OnReceiveOrder onReceiveOrder){
+        this.onReceiveOrder=onReceiveOrder;
+    }
+
+    private int analyse(String message){
+        String[] strs=new String[]{};
+        strs=message.split(",");
+        return strs.length;
+    }
 
 }

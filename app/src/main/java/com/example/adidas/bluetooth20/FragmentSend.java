@@ -22,14 +22,17 @@ import java.util.ArrayList;
 public class FragmentSend extends Fragment {
 
     private EditText edit1,edit2,edit3,edit4,edit5,edit6,edit7;
-    private TextView textView;
+    private TextView textView,textOrder;
     private Button btnSingle,btnConsist,btnResultOK,btnResultWrong;
     private Spinner spin1,spin2,spin3;
 
     private float[] floatData;
     private int[] status;
     private String result;
+    private String testing;
+    private int orderPostion=0;
 
+    MainActivity activity;
     private DataCollection collection;
 
     /**
@@ -58,8 +61,7 @@ public class FragmentSend extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_send, container, false);
         bindView(rootView);
-        final MainActivity activity= (MainActivity) getActivity();
-
+        activity= (MainActivity) getActivity();
         result="未接收测试";
         textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
 
@@ -82,6 +84,12 @@ public class FragmentSend extends Fragment {
         spin2.setOnItemSelectedListener(listener);
         spin3.setOnItemSelectedListener(listener);
 
+        activity.setOnReceiveOrder(new MainActivity.OnReceiveOrder() {
+            @Override
+            public void onOrder(String msg) {
+
+            }
+        });
 
 
         btnSingle.setOnClickListener(new View.OnClickListener() {
@@ -89,18 +97,55 @@ public class FragmentSend extends Fragment {
             public void onClick(View view) {
 
                 floatData=getFloatData();
+                analyseOrder(orderPostion);
+                if (collection==null){
                 collection=new DataCollection(floatData,status,result);
+                }else {
+                    collection.updateData(floatData);
+                    collection.updateData(status);
+                    collection.updateData(result);
+                }
                 String message=collection.toString();
                 activity.sendMessage(message);
             }
         });
 
+        btnResultOK.setOnClickListener(btnListener);
+        btnResultWrong.setOnClickListener(btnListener);
+
+
 
         return rootView;
     }
+    Button.OnClickListener btnListener=new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            if (orderPostion==0){
+                textOrder.setText(analyseOrder(orderPostion));
+                return;
+            }
+            switch (view.getId()){
+                case R.id.fragsend_btnOK:
+                    result=analyseOrder(orderPostion)+"完毕，测试成功";
+                    break;
+                case R.id.fragsend_btnWrong:
+                    result=analyseOrder(orderPostion)+"完毕，测试失败";
+                    break;
+            }
+            if (collection==null){
+                collection=new DataCollection(floatData,status,result);
+            }else {
+                collection.updateData(result);
+            }
+            String message=collection.toString();
+            activity.sendMessage(message);
+        }
+
+    };
 
     public void bindView(View rootView){
         textView = (TextView) rootView.findViewById(R.id.fragsend_text);
+        textOrder= (TextView) rootView.findViewById(R.id.fragsend_text_order);
         edit1= (EditText) rootView.findViewById(R.id.fragsend_edit1);
         edit2= (EditText) rootView.findViewById(R.id.fragsend_edit2);
         edit3= (EditText) rootView.findViewById(R.id.fragsend_edit3);
@@ -135,6 +180,33 @@ public class FragmentSend extends Fragment {
         return floatData;
     }
 
+    public String analyseOrder(int orderPostion){
+        switch (orderPostion){
+            case 0:
+                testing="未接收到测试指令";
+                break;
+            case 1:
+                testing="密封测试";
+                break;
+            case 2:
+                testing="小流量测试";
+                break;
+            case 3:
+                testing="大流量测试";
+                break;
+            case 4:
+                testing="动态测试";
+                break;
+            case 5:
+                testing="排空";
+                break;
+            case 6:
+                testing="停止";
+                break;
+
+        }
+        return testing;
+    }
 
 
 }

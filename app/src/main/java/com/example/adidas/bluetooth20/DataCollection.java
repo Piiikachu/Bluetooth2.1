@@ -67,7 +67,7 @@ public class DataCollection {
         return collect;
     }
 
-    public ArrayList<String> updateDate(String string){
+    public ArrayList<String> updateData(String string){
         collect.set(10,string);
 
         return collect;

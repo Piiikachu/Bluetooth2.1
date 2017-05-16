@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 /**
@@ -24,6 +25,7 @@ public class FragmentGet extends Fragment {
     private Button btnTest;
     private float[] data;
     private LinkedList<String> strData;
+    private ArrayList<String> collectData;
 
 
     /**
@@ -61,7 +63,8 @@ public class FragmentGet extends Fragment {
         activity.setOnReceiveMessage(new MainActivity.OnReceiveMessage() {
             @Override
             public void readMsg(String msg) {
-                textView.setText(msg);
+                analysMessage(msg);
+                mAdapter.updateData(data);
             }
         });
         btnTest= (Button) rootView.findViewById(R.id.fragget_btn);
@@ -94,6 +97,27 @@ public class FragmentGet extends Fragment {
         return rootView;
     }
 
+    public void analysMessage(String message){
+        String[] strs=new String[]{};
+        strs=message.split(",");
+        if (collectData==null){
+        this.collectData=new ArrayList<>();
+            for (int i=0;i<5;i++)
+            collectData.add(strs[i]);
+        }else {
+            for (int i=0;i<5;i++)
+                collectData.set(i,strs[i]);
+        }
+
+        data[0]=Float.valueOf(collectData.get(0));
+        data[2]=Float.valueOf(collectData.get(1));
+        data[3]=Float.valueOf(collectData.get(2));
+        data[4]=Float.valueOf(collectData.get(3));
+        data[1]=Float.valueOf(collectData.get(4));
+
+
+
+    }
 
 
 }

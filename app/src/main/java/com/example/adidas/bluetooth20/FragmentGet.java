@@ -1,6 +1,7 @@
 package com.example.adidas.bluetooth20;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,8 +25,10 @@ public class FragmentGet extends Fragment {
 
     private Button btnTest;
     private float[] data;
+    private int orderPosition;
     private LinkedList<String> strData;
     private ArrayList<String> collectData;
+    private MainActivity activity;
 
 
     /**
@@ -54,19 +57,13 @@ public class FragmentGet extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_get, container, false);
 
-        MainActivity activity= (MainActivity) getActivity();
+        activity= (MainActivity) getActivity();
 
 
         textView = (TextView) rootView.findViewById(R.id.fragget_text);
         textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
 
-        activity.setOnReceiveMessage(new MainActivity.OnReceiveMessage() {
-            @Override
-            public void readMsg(String msg) {
-                analysMessage(msg);
-                mAdapter.updateData(data);
-            }
-        });
+
         btnTest= (Button) rootView.findViewById(R.id.fragget_btn);
         listView= (ListView) rootView.findViewById(R.id.fragget_listview);
         data=new float[5];
@@ -97,15 +94,28 @@ public class FragmentGet extends Fragment {
         return rootView;
     }
 
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        activity.setOnReceiveMessage(new MainActivity.OnReceiveMessage() {
+            @Override
+            public void readMsg(String msg) {
+                analysMessage(msg);
+                mAdapter.updateData(data);
+
+            }
+        });
+    }
+
     public void analysMessage(String message){
         String[] strs=new String[]{};
         strs=message.split(",");
         if (collectData==null){
         this.collectData=new ArrayList<>();
-            for (int i=0;i<5;i++)
+            for (int i=0;i<6;i++)
             collectData.add(strs[i]);
         }else {
-            for (int i=0;i<5;i++)
+            for (int i=0;i<6;i++)
                 collectData.set(i,strs[i]);
         }
 
@@ -115,9 +125,21 @@ public class FragmentGet extends Fragment {
         data[4]=Float.valueOf(collectData.get(3));
         data[1]=Float.valueOf(collectData.get(4));
 
+        FragmentSend.orderPosition=Integer.valueOf(collectData.get(5));
 
 
     }
+
+    public interface OnOrderReceived{
+        void receiveOrder();
+    }
+
+    public OnOrderReceived onOrderReceived;
+
+    public void setOnOrderReceived(OnOrderReceived onOrderReceived){
+        this.onOrderReceived=onOrderReceived;
+    }
+
 
 
 }

@@ -1,6 +1,7 @@
 package com.example.adidas.bluetooth20;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -30,7 +31,7 @@ public class FragmentSend extends Fragment {
     private int[] status;
     private String result;
     private String testing;
-    private int orderPostion=0;
+    public static int orderPosition=0;
 
     MainActivity activity;
     private DataCollection collection;
@@ -97,7 +98,7 @@ public class FragmentSend extends Fragment {
             public void onClick(View view) {
 
                 floatData=getFloatData();
-                analyseOrder(orderPostion);
+                analyseOrder(orderPosition);
                 if (collection==null){
                 collection=new DataCollection(floatData,status,result);
                 }else {
@@ -111,8 +112,21 @@ public class FragmentSend extends Fragment {
         });
 
         btnResultOK.setOnClickListener(btnListener);
+        btnResultOK.setEnabled(false);
         btnResultWrong.setOnClickListener(btnListener);
+        btnResultWrong.setEnabled(false);
 
+
+        activity.fragmentGet.setOnOrderReceived(new FragmentGet.OnOrderReceived() {
+            @Override
+            public void receiveOrder() {
+                if (orderPosition!=0){
+                    btnResultWrong.setEnabled(true);
+                    btnResultOK.setEnabled(true);
+                }
+                textOrder.setText(analyseOrder(orderPosition)+"进行中，模拟返回测试结果");
+            }
+        });
 
 
         return rootView;
@@ -120,16 +134,21 @@ public class FragmentSend extends Fragment {
     Button.OnClickListener btnListener=new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            if (orderPostion==0){
-                textOrder.setText(analyseOrder(orderPostion));
+            if (orderPosition==0){
+                textOrder.setText(analyseOrder(orderPosition));
                 return;
             }
             switch (view.getId()){
                 case R.id.fragsend_btnOK:
-                    result=analyseOrder(orderPostion)+"完毕，测试成功";
+                    result=analyseOrder(orderPosition)+"完毕，测试成功";
+
+                    btnResultOK.setEnabled(false);
+                    btnResultWrong.setEnabled(false);
                     break;
                 case R.id.fragsend_btnWrong:
-                    result=analyseOrder(orderPostion)+"完毕，测试失败";
+                    result=analyseOrder(orderPosition)+"完毕，测试失败";
+                    btnResultOK.setEnabled(false);
+                    btnResultWrong.setEnabled(false);
                     break;
             }
             if (collection==null){
@@ -139,9 +158,19 @@ public class FragmentSend extends Fragment {
             }
             String message=collection.toString();
             activity.sendMessage(message);
+            orderPosition=0;
+            result=analyseOrder(orderPosition);
+            textOrder.setText(result);
         }
 
     };
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+    }
+
 
     public void bindView(View rootView){
         textView = (TextView) rootView.findViewById(R.id.fragsend_text);
@@ -207,6 +236,9 @@ public class FragmentSend extends Fragment {
         }
         return testing;
     }
+
+
+
 
 
 }

@@ -32,13 +32,16 @@ import com.example.adidas.bluetooth20.Bluetooth.BluetoothActivity;
 import com.example.adidas.bluetooth20.Bluetooth.BluetoothChatService;
 import com.example.adidas.bluetooth20.Bluetooth.Constants;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 public class MainActivity extends BluetoothActivity {
 
 
     private int testnum=0;
     private FragmentManager fm;
-    private FragmentSend fragmentSend;
-    private FragmentGet fragmentGet;
+    public FragmentSend fragmentSend;
+    public FragmentGet fragmentGet;
 
     private static final int REQUEST_CONNECT_DEVICE_SECURE = 1;
     private static final int REQUEST_CONNECT_DEVICE_INSECURE = 2;
@@ -51,7 +54,7 @@ public class MainActivity extends BluetoothActivity {
      * may be best to switch to a
      * {@link android.support.v4.app.FragmentStatePagerAdapter}.
      */
-    private SectionsPagerAdapter mSectionsPagerAdapter;
+    public SectionsPagerAdapter mSectionsPagerAdapter;
 
     /**
      * The {@link ViewPager} that will host the section contents.
@@ -87,14 +90,31 @@ public class MainActivity extends BluetoothActivity {
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        /*FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
-        });
+        });*/
+
+        Timer timer=new Timer(true);
+        TimerTask task=new TimerTask() {
+            @Override
+            public void run() {
+                fm=getSupportFragmentManager();
+                fragmentSend = (FragmentSend) mSectionsPagerAdapter.instantiateItem(mViewPager,2);
+                /*send_btn= (Button) fragmentSend.getView().findViewById(R.id.btn_sendmessage);*/
+                fragmentGet= (FragmentGet) mSectionsPagerAdapter.instantiateItem(mViewPager,1);
+
+
+            }
+        };
+
+        timer.schedule(task,100);
+
+
 
     }
 
@@ -316,6 +336,7 @@ public class MainActivity extends BluetoothActivity {
 
                     }else{
                     onReceiveMessage.readMsg(readMessage);
+                    fragmentGet.onOrderReceived.receiveOrder();
                     }
                     /*onGetTextChange.OnGetTextChange(mConnectedDeviceName + ":  "+readMessage);*/
                    /* mConversationArrayAdapter.add(mConnectedDeviceName + ":  " + readMessage);*/

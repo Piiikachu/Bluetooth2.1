@@ -9,14 +9,17 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.adidas.bluetooth20.MainActivity$FragmentBluetooth">
 
-    <TextView
-        android:id="@+id/section_label"
-        android:layout_width="wrap_content"
+
+
+    <Button
+        android:text="搜索蓝牙设备"
+        android:id="@+id/fragmain_btn"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
     <Button
-        android:text="搜索"
-        android:id="@+id/fragmain_btn"
+        android:text="使本设备可被发现（120s）"
+        android:id="@+id/fragmain_btndiscover"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 

@@ -14,10 +14,10 @@ public class DataCollection {
     ArrayList<String> collect;
 
     public DataCollection(float[] floatData,int[] status,String result){
-        this.floatData=new float[7];
+        this.floatData=new float[6];
         this.status=new int[3];
 
-        if (floatData.length>7)
+        if (floatData.length>6)
             return;
         if (status.length>3)
             return;
@@ -32,12 +32,12 @@ public class DataCollection {
     }
 
     public ArrayList<String> collectData(float[] floatData,int[] status,String result){
-        if (floatData.length>7)
+        if (floatData.length>6)
             return null;
         if (status.length>3)
             return null;
 
-        for (int i=0;i<7;i++){
+        for (int i=0;i<6;i++){
             collect.add(String.valueOf(floatData[i]));
         }
 
@@ -51,9 +51,9 @@ public class DataCollection {
     }
 
     public ArrayList<String> updateData(float[] floatData){
-        if (floatData.length>7)
+        if (floatData.length>6)
             return null;
-        for (int i=0;i<7;i++){
+        for (int i=0;i<6;i++){
             collect.set(i,String.valueOf(floatData[i]));
         }
         return collect;
@@ -62,13 +62,13 @@ public class DataCollection {
         if (status.length>3)
             return null;
         for (int i=0;i<3;i++){
-            collect.set(i+7,String.valueOf(status[i]));
+            collect.set(i+6,String.valueOf(status[i]));
         }
         return collect;
     }
 
     public ArrayList<String> updateData(String string){
-        collect.set(10,string);
+        collect.set(9,string);
 
         return collect;
     }

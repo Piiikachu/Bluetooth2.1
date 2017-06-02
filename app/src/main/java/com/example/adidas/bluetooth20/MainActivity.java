@@ -2,6 +2,7 @@ package com.example.adidas.bluetooth20;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
@@ -19,6 +20,9 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.method.LinkMovementMethod;
+import android.text.util.Linkify;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -42,7 +46,9 @@ public class MainActivity extends BluetoothActivity {
     private FragmentManager fm;
     public FragmentSend fragmentSend;
     public FragmentGet fragmentGet;
+    public FragmentBluetooth fragmentBluetooth;
 
+    private Toolbar toolbar;
     private static final int REQUEST_CONNECT_DEVICE_SECURE = 1;
     private static final int REQUEST_CONNECT_DEVICE_INSECURE = 2;
     private static final int REQUEST_ENABLE_BT = 3;
@@ -66,7 +72,7 @@ public class MainActivity extends BluetoothActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
@@ -107,8 +113,13 @@ public class MainActivity extends BluetoothActivity {
                 fragmentSend = (FragmentSend) mSectionsPagerAdapter.instantiateItem(mViewPager,2);
                 /*send_btn= (Button) fragmentSend.getView().findViewById(R.id.btn_sendmessage);*/
                 fragmentGet= (FragmentGet) mSectionsPagerAdapter.instantiateItem(mViewPager,1);
-
-
+                fragmentBluetooth= (FragmentBluetooth) mSectionsPagerAdapter.instantiateItem(mViewPager,0);
+                fragmentBluetooth.setOnDiscoverable(new FragmentBluetooth.OnDiscoverable() {
+                    @Override
+                    public void discover() {
+                        ensureDiscoverable();
+                    }
+                });
             }
         };
 
@@ -135,6 +146,7 @@ public class MainActivity extends BluetoothActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            displayAboutDialog();
             return true;
         }
 
@@ -144,7 +156,6 @@ public class MainActivity extends BluetoothActivity {
     @Override
     public void onStart() {
         super.onStart();
-
 
     }
 
@@ -160,28 +171,28 @@ public class MainActivity extends BluetoothActivity {
 
     @Override
     protected void setStatus(int resId) {
-        FragmentActivity activity = MainActivity.this;
+/*        FragmentActivity activity = MainActivity.this;
         if (null == activity) {
             return;
         }
-        final ActionBar actionBar = activity.getActionBar();
-        if (null == actionBar) {
+        final ActionBar actionBar = activity.getActionBar();*/
+        if (null == toolbar) {
             return;
         }
-        actionBar.setSubtitle(resId);
+        toolbar.setSubtitle(resId);
     }
 
     @Override
     protected void setStatus(CharSequence subTitle) {
-        FragmentActivity activity = MainActivity.this;
+/*        FragmentActivity activity = MainActivity.this;
         if (null == activity) {
             return;
         }
-        final ActionBar actionBar = activity.getActionBar();
-        if (null == actionBar) {
+        final ActionBar actionBar = activity.getActionBar();*/
+        if (null == toolbar) {
             return;
         }
-        actionBar.setSubtitle(subTitle);
+        toolbar.setSubtitle(subTitle);
     }
 
     @Override
@@ -345,7 +356,7 @@ public class MainActivity extends BluetoothActivity {
                     // save the connected device's name
                     mConnectedDeviceName = msg.getData().getString(Constants.DEVICE_NAME);
 
-                    Toast.makeText(getBaseContext(), "Connected to " + mConnectedDeviceName, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getBaseContext(), "连接到 " + mConnectedDeviceName, Toast.LENGTH_SHORT).show();
 
                     break;
                 case Constants.MESSAGE_TOAST:
@@ -384,4 +395,31 @@ public class MainActivity extends BluetoothActivity {
         return strs.length;
     }
 
+    private void displayAboutDialog() {
+        final int paddingSizeDp = 5;
+        final float scale = getResources().getDisplayMetrics().density;
+        final int dpAsPixels = (int) (paddingSizeDp * scale + 0.5f);
+
+        final TextView textView = new TextView(this);
+        final SpannableString text = new SpannableString(getString(R.string.about_dialog_text));
+
+        textView.setText(text);
+        textView.setAutoLinkMask(RESULT_OK);
+        textView.setMovementMethod(LinkMovementMethod.getInstance());
+        textView.setPadding(dpAsPixels, dpAsPixels, dpAsPixels, dpAsPixels);
+
+        Linkify.addLinks(text, Linkify.ALL);
+        new AlertDialog.Builder(this)
+                .setTitle("关于")
+                .setCancelable(false)
+                .setPositiveButton(android.R.string.ok, null)
+                .setView(textView)
+                .show();
+    }
+
+    @Override
+    public void onDestroy() {
+        fragmentSend.saveSH();
+        super.onDestroy();
+    }
 }

@@ -60,8 +60,6 @@ public class FragmentGet extends Fragment {
         activity= (MainActivity) getActivity();
 
 
-        textView = (TextView) rootView.findViewById(R.id.fragget_text);
-        textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
 
 
         btnTest= (Button) rootView.findViewById(R.id.fragget_btn);

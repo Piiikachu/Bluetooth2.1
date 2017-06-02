@@ -148,7 +148,7 @@ public abstract class BluetoothActivity extends AppCompatActivity {
         }
     }
 
-    protected void ensureDiscoverable() {
+    public void ensureDiscoverable() {
         if (mBTAdapter.getScanMode() !=
                 BluetoothAdapter.SCAN_MODE_CONNECTABLE_DISCOVERABLE) {
             Intent discoverableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);

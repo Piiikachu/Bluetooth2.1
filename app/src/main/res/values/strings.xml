@@ -5,24 +5,34 @@
 
     <!--  BluetoothChat -->
     <string name="send">Send</string>
-    <string name="not_connected">You are not connected to a device</string>
-    <string name="bt_not_enabled_leaving">Bluetooth was not enabled. Leaving Bluetooth Chat.</string>
-    <string name="title_connecting">connecting...</string>
-    <string name="title_connected_to">connected to <xliff:g id="device_name">%1$s</xliff:g></string>
-    <string name="title_not_connected">not connected</string>
+    <string name="not_connected">未连接蓝牙设备</string>
+    <string name="bt_not_enabled_leaving">蓝牙被关闭，退出程序</string>
+    <string name="title_connecting">连接中...</string>
+    <string name="title_connected_to">连接到<xliff:g id="device_name">%1$s</xliff:g></string>
+    <string name="title_not_connected">未连接设备</string>
 
     <!--  DeviceListActivity -->
-    <string name="scanning">scanning for devices...</string>
-    <string name="select_device">select a device to connect</string>
-    <string name="none_paired">No devices have been paired</string>
-    <string name="none_found">No devices found</string>
-    <string name="title_paired_devices">Paired Devices</string>
-    <string name="title_other_devices">Other Available Devices</string>
-    <string name="button_scan">Scan for devices</string>
+    <string name="scanning">扫描设备中</string>
+    <string name="select_device">选择需要连接的设备</string>
+    <string name="none_paired">没有已匹配的设备</string>
+    <string name="none_found">没有发现设备</string>
+    <string name="title_paired_devices">已配对的设备</string>
+    <string name="title_other_devices">其他可选设备</string>
+    <string name="button_scan">扫描设备</string>
 
     <!-- Options Menu -->
     <string name="secure_connect">Connect a device - Secure</string>
     <string name="insecure_connect">Connect a device - Insecure</string>
     <string name="discoverable">Make discoverable</string>
+
+    <string name="about_dialog_text">\n
+        项目简介：\n
+        基于Android的模拟ECU端，支持与SCR平板终端的数据通信\n
+        项目地址：https://github.com/Piiikachu/Bluetooth2.1\n
+        作者：王礼驰\n
+        指导教师：刘兴华\n
+        邮箱：314475440@qq.com\n
+        北京理工大学机械与车辆学院
+    </string>
 
 </resources>

@@ -2,6 +2,7 @@ package com.example.adidas.bluetooth20;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,9 +27,10 @@ public class FragmentBluetooth extends Fragment {
     private static final int REQUEST_CONNECT_DEVICE_INSECURE = 2;
     private static final int REQUEST_ENABLE_BT = 3;
 
-    private Button btn_search;
-    private ListView listView;
-    private GetListAdapter mAdapter;
+    private Button btn_search,btn_discover;
+
+
+    private MainActivity activity;
 
     private float[] data;
     private LinkedList<String> strData;
@@ -54,22 +56,42 @@ public class FragmentBluetooth extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-        TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-        textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
+
+        activity= (MainActivity) getActivity();
 
         btn_search= (Button) rootView.findViewById(R.id.fragmain_btn);
         btn_search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent1=new Intent(getActivity(),DeviceActivity.class);
+                Intent intent1=new Intent(getContext(),DeviceActivity.class);
                 getActivity().startActivityForResult(intent1,REQUEST_CONNECT_DEVICE_SECURE);
             }
         });
 
 
+        btn_discover= (Button) rootView.findViewById(R.id.fragmain_btndiscover);
+        btn_discover.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onDiscoverable.discover();
+            }
+        });
+
+
+
         return rootView;
+
     }
 
 
 
+    public interface OnDiscoverable{
+        void discover();
+    }
+
+    private OnDiscoverable onDiscoverable;
+
+    public void setOnDiscoverable(OnDiscoverable onDiscoverable) {
+        this.onDiscoverable = onDiscoverable;
+    }
 }

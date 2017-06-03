@@ -26,7 +26,7 @@ public class FragmentSend extends Fragment {
 
     private EditText edit1,edit2,edit3,edit4,edit5,edit6,edit7;
     private TextView textView,textOrder;
-    private Button btnSingle,btnConsist,btnResultOK,btnResultWrong;
+    private Button btnSingle,btnResultOK,btnResultWrong;
     private Spinner spin1,spin2,spin3;
 
     private Context mContext;
@@ -67,7 +67,7 @@ public class FragmentSend extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_send, container, false);
         bindView(rootView);
         activity= (MainActivity) getActivity();
-        result="";
+        result=" ";
 
         floatData=getFloatData();
 
@@ -126,8 +126,18 @@ public class FragmentSend extends Fragment {
                 if (orderPosition!=0){
                     btnResultWrong.setEnabled(true);
                     btnResultOK.setEnabled(true);
+                    if (orderPosition==6){
+                        btnResultWrong.setEnabled(false);
+                        btnResultOK.setEnabled(false);
+                        textOrder.setText("测试被终止！");
+                        return;
+                    }
                 }
                 textOrder.setText(analyseOrder(orderPosition)+"进行中，模拟返回测试结果");
+                if (Float.valueOf(activity.fragmentGet.collectData.get(3))!=0f)
+                edit2.setText(activity.fragmentGet.collectData.get(3));
+                if (Float.valueOf(activity.fragmentGet.collectData.get(0))!=0f)
+                edit5.setText(activity.fragmentGet.collectData.get(0));
             }
         });
 
@@ -158,6 +168,7 @@ public class FragmentSend extends Fragment {
                     break;
             }
             if (collection==null){
+                floatData=getFloatData();
                 collection=new DataCollection(floatData,status,result);
             }else {
                 collection.updateData(result);
@@ -207,7 +218,6 @@ public class FragmentSend extends Fragment {
         edit5= (EditText) rootView.findViewById(R.id.fragsend_edit5);
         edit6= (EditText) rootView.findViewById(R.id.fragsend_edit6);
         btnSingle= (Button) rootView.findViewById(R.id.fragsend_btn_single_send);
-        btnConsist= (Button) rootView.findViewById(R.id.fragsend_btn_consist_send);
         btnResultOK= (Button) rootView.findViewById(R.id.fragsend_btnOK);
         btnResultWrong= (Button) rootView.findViewById(R.id.fragsend_btnWrong);
         spin1= (Spinner) rootView.findViewById(R.id.fragsend_spin1);
@@ -236,7 +246,7 @@ public class FragmentSend extends Fragment {
     public String analyseOrder(int orderPostion){
         switch (orderPostion){
             case 0:
-                testing="";
+                testing=" ";
                 break;
             case 1:
                 testing="密封测试";

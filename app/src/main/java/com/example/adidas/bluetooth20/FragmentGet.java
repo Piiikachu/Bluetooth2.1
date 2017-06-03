@@ -27,7 +27,7 @@ public class FragmentGet extends Fragment {
     private float[] data;
     private int orderPosition;
     private LinkedList<String> strData;
-    private ArrayList<String> collectData;
+    public ArrayList<String> collectData;
     private MainActivity activity;
 
 

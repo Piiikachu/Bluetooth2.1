@@ -347,7 +347,12 @@ public class MainActivity extends BluetoothActivity {
 
                     }else{
                     onReceiveMessage.readMsg(readMessage);
-                    fragmentGet.onOrderReceived.receiveOrder();
+                        try{
+                            fragmentGet.onOrderReceived.receiveOrder();
+                        }catch (Exception e){
+
+                        }
+
                     }
                     /*onGetTextChange.OnGetTextChange(mConnectedDeviceName + ":  "+readMessage);*/
                    /* mConversationArrayAdapter.add(mConnectedDeviceName + ":  " + readMessage);*/

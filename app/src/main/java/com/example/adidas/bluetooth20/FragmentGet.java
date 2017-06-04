@@ -23,7 +23,7 @@ public class FragmentGet extends Fragment {
     private GetListAdapter mAdapter;
     private TextView textView;
 
-    private Button btnTest;
+
     private float[] data;
     private int orderPosition;
     private LinkedList<String> strData;
@@ -62,7 +62,6 @@ public class FragmentGet extends Fragment {
 
 
 
-        btnTest= (Button) rootView.findViewById(R.id.fragget_btn);
         listView= (ListView) rootView.findViewById(R.id.fragget_listview);
         data=new float[5];
         data[0]=0.0f;
@@ -73,17 +72,7 @@ public class FragmentGet extends Fragment {
 
 
         mAdapter=new GetListAdapter(getActivity(),data);
-        btnTest.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                data[0]=1.0f;
-                data[1]=2.0f;
-                data[2]=3.0f;
-                data[3]=4.0f;
-                data[4]=0.5f;
-                mAdapter.updateData(data);
-            }
-        });
+
 
 
         listView.setAdapter(mAdapter);

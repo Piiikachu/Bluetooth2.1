@@ -2,6 +2,7 @@ package com.example.adidas.bluetooth20;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.provider.SyncStateContract;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -14,6 +15,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.example.adidas.bluetooth20.Bluetooth.Constants;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -22,7 +26,7 @@ import java.util.Map;
  * Created by Adidas on 2017/5/13.
  */
 
-public class FragmentSend extends Fragment {
+public class FragmentSend extends Fragment implements Constants{
 
     private EditText edit1,edit2,edit3,edit4,edit5,edit6,edit7;
     private TextView textView,textOrder;
@@ -101,6 +105,8 @@ public class FragmentSend extends Fragment {
             public void onClick(View view) {
 
                 floatData=getFloatData();
+
+
                 analyseOrder(orderPosition);
                 if (collection==null){
                 collection=new DataCollection(floatData,status,result);
@@ -108,6 +114,10 @@ public class FragmentSend extends Fragment {
                     collection.updateData(floatData);
                     collection.updateData(status);
                     collection.updateData(result);
+                }
+                if (activity.state!= STATE_CONNECTED){
+                    Toast.makeText(getActivity(),"未连接蓝牙设备",Toast.LENGTH_SHORT).show();
+                    return;
                 }
                 String message=collection.toString();
                 activity.sendMessage(message);
